@@ -1,0 +1,147 @@
+<html>
+
+<title>Scanner serial comms client</title>
+
+<head>
+  <script src="js/socket.io-client.min.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+  <script type="text/javascript">
+    var socket = io.connect();
+
+    socket.on('connected', function(data) {
+      console.log('Connected, this is what I received : ');
+    });
+
+    // when you get a receiveSerial event, do this
+    socket.on('receiveSerial', function(data) {
+      console.log(data);
+
+      $("#serialDisplay").val(data);
+
+      //Split out RF data
+      if (data.indexOf("RF") >= 0) {
+        freq = data.substring(data.indexOf("RF") + 2);
+        $("#frequency").val(freq.split(" ")[0]);
+      };
+
+      //Split out Level and Mute data
+      if (data.indexOf("LM") >= 0) {
+        levelData = data.substring(data.indexOf("LM") + 2);
+        level = levelData.substring(0, 3);
+        mute = levelData.substring(3, 4);
+        $("#level").val(level.split(" ")[0] * -1);
+      }
+
+      //Split out and determine receiver mode
+      if (data.indexOf("MD") >= 0) {
+        modeData = data.substring(data.indexOf("MD") + 2);
+        modeCode = modeData.split(" ")[0];
+        $("#mode").val(modeCode.split(" ")[0]);
+      }
+
+      //Split out step rate
+      if (data.indexOf("ST") >= 0) {
+        step = data.substring(data.indexOf("ST") + 2);
+        $("#step").val(step.split(" ")[0]);
+      }
+
+
+    });
+  </script>
+
+
+  <body>
+
+
+    <h2>AOR AR-DV1 Control</h2>
+
+    <label for="frequency">Frequency (MHz):</label>
+    <input id="frequency" value="Waiting.." />
+    <input id="up" type="submit" value="UP" />
+    <input id="down" type="submit" value="DOWN" />
+
+
+    <label for="level">Level:</label>
+    <input disabled="disabled" id="level" value="Waiting.." />
+
+    <label for="mode">Mode:</label>
+    <input id="mode" value="Waiting.." />
+
+    <label for="step">Step (kHz):</label>
+    <input id="step" value="Waiting.." />
+
+    <input id="send" type="submit" value="Send" />
+
+    <script>
+      $("#frequency").keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          var inputFreq = document.getElementById('frequency').value;
+          var newFreq = parseFloat(inputFreq).toFixed(5);
+          var inputCommand = "RF" + newFreq;
+          console.log("sending: " + inputCommand)
+          socket.emit("sendSerial", inputCommand);
+          socket.emit("sendSerial", "RX");
+          $("#frequency").submit();
+        }
+      });
+
+      $("#step").keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          var inputStep = document.getElementById('step').value;
+          var newStep = parseFloat(inputStep).toFixed(2);
+          var inputCommand = "ST" + newStep;
+          console.log("sending: " + inputCommand)
+          socket.emit("sendSerial", inputCommand);
+          socket.emit("sendSerial", "RX");
+          $("#step").submit();
+        }
+      });
+
+      $("#mode").keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          var inputMode = document.getElementById('mode').value;
+          var newMode = parseFloat(inputMode);
+          var inputCommand = "MD" + newMode;
+          console.log("sending: " + inputCommand)
+          socket.emit("sendSerial", inputCommand);
+          socket.emit("sendSerial", "RX");
+          $("#mode").submit();
+        }
+      });
+
+      $("#up").click(function(event) {
+        event.preventDefault();
+        var inputFreq = document.getElementById('frequency').value;
+        var inputStep = document.getElementById('step').value;
+        var newStep = parseFloat(inputStep).toFixed(2);
+        var newFreq = parseFloat(parseFloat(inputFreq) + parseFloat(newStep * 0.001)).toFixed(5);
+        console.log("New freq: " + newFreq);
+        var inputCommand = "RF" + newFreq;
+        socket.emit("sendSerial", inputCommand);
+        socket.emit("sendSerial", "RX");
+      });
+
+      $("#down").click(function(event) {
+        event.preventDefault();
+        var inputFreq = document.getElementById('frequency').value;
+        var inputStep = document.getElementById('step').value;
+        var newStep = parseFloat(inputStep).toFixed(2);
+        var newFreq = parseFloat(parseFloat(inputFreq) - parseFloat(newStep * 0.001)).toFixed(5);
+        console.log("New freq: " + newFreq);
+        var inputCommand = "RF" + newFreq;
+        socket.emit("sendSerial", inputCommand);
+        socket.emit("sendSerial", "RX");
+      });
+    </script>
+
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+</body>
+
+</html>

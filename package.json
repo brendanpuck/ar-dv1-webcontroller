@@ -1,0 +1,23 @@
+{
+  "name": "ar-dv1-webcontroller",
+  "version": "1.0.0",
+  "description": "Based on earlier projects inc. Scanner on web",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brendan Puckeridge",
+  "license": "ISC",
+  "dependencies": {
+    "express": "*",
+    "serialport": "*",
+    "socket.io": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brendanpuck/ar-dv1-webcontroller"
+  },
+  "bugs": {
+    "url": "https://github.com/brendanpuck/ar-dv1-webcontroller"
+  }
+}

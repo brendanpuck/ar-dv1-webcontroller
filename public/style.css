@@ -1,0 +1,66 @@
+body {
+    background-color: black;
+    color: #0F0;
+    font-family: verdana;
+}
+
+body input,
+body label {
+    display: inline-block;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+input {
+    outline: none;
+    width: 50%;
+    background-color: black;
+    color: #0F0;
+    padding: 1em .5em;
+    display: inline-block;
+    float: left;
+    clear: right;
+    font-size: 1em;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+
+label {
+    display: inline-block;
+    padding: .5em .5em;
+    font-size: 1em;
+    float: left;
+    text-align: left;
+    clear: right;
+    width: 20%;
+}
+
+#send {
+    display:inline-block;
+    width: 10%;
+    float: left;
+}
+#up {
+    display:inline-block;
+    width: 10%;
+    float: left;
+}
+
+#down {
+    display:inline-block;
+    width: 10%;
+    float: left;
+}
+
+#level {
+  width: 70%;
+}
+
+#mode {
+  width: 70%;
+}
