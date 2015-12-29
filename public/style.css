@@ -4,6 +4,13 @@ body {
     font-family: verdana;
 }
 
+div {
+    display: block;
+    float: left;
+    width: 100%;
+    width: 100vw;
+}
+
 body input,
 body label {
     display: inline-block;
@@ -16,7 +23,7 @@ h1 {
 
 input {
     outline: none;
-    width: 70%;
+    width: 20%;
     background-color: black;
     color: #0F0;
     padding: 1em .5em;
@@ -42,13 +49,13 @@ label {
 
 select {
   display: inline-block;
-  width: 50%;
+  width: 20%;
   float: left;
 }
 
 #frequency {
     display:inline-block;
-    width: 50%;
+    width: 20%;
     float: left;
 
 }

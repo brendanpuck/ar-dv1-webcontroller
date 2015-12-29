@@ -1,6 +1,6 @@
 <html>
 
-<title>Scanner serial comms client</title>
+    <title>AOR AR-DV1 Receiver control</title>
 
 <head>
   <script src="js/socket.io-client.min.js"></script>
@@ -35,9 +35,47 @@
 
       //Split out and determine receiver mode
       if (data.indexOf("MD") >= 0) {
-        modeData = data.substring(data.indexOf("MD") + 2);
+        modeData = data.substring(data.indexOf("MD") + 3); //get only last 2 digits of the 3
         modeCode = modeData.split(" ")[0];
-        $("#mode").val(modeCode.split(" ")[0]);
+        //$("#mode").val(modeCode.split(" ")[0]);
+        switch (modeCode) { //TODO: use jquery to update current mode for all clients
+            case "00":
+            //$("#mode").html('<select id="mode">Auto</option></select>');
+              console.log("Auto");
+            break;
+            case "F1":
+            //$("#mode").html('<select id="mode">AM</option></select>');
+                console.log("AM");
+            break;
+            case "F0":
+            //$("#mode").html('<select id="mode">FM</option></select>');
+                console.log("FM");
+            break;
+            case "F4":
+                console.log("USB");
+            break;
+            case "F5":
+                console.log("LSB");
+            break;
+            case "F6":
+                console.log("CW");
+            break;
+            case "10":
+                console.log("D-Star");
+            break;
+            case "40":
+                console.log("NXDN");
+            break;
+            case "50":
+                console.log("P25");
+            break;
+            case "70":
+                console.log("DMR");
+            break;
+            default:
+                console.log("unknown mode");
+        }
+        //$("#mode").val(modeCode);
       }
 
       //Split out step rate
@@ -53,21 +91,25 @@
 
   <body>
 
-
     <h2>AOR AR-DV1 Control</h2>
+    <form>
+        <div>
 
     <label for="frequency">Frequency (MHz):</label>
-    <input id="frequency" value="Waiting.." />
+    <input type="number" id="frequency" value="Waiting.." />
     <input id="up" type="submit" value="UP" />
     <input id="down" type="submit" value="DOWN" />
-
+        </div>
+        <div>
 
     <label for="level">Level:</label>
     <input disabled="disabled" id="level" value="Waiting.." />
-
+        </div>
+        <div>
     <label for="step">Step (kHz):</label>
-    <input id="step" value="Waiting.." />
-
+    <input type="number" id="step" value="Waiting.." />
+        </div>
+        <div> 
     <label for="mode">Mode:</label>
     <select id="mode">
       <option value="000">Auto</option>
@@ -81,7 +123,8 @@
       <option value="550">P25</option>
       <option value="770">DMR</option>
     </select>
-
+        </div>
+    
     <script>
       $("#frequency").keypress(function(event) {
         if (event.which == 13) {
