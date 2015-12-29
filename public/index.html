@@ -65,13 +65,22 @@
     <label for="level">Level:</label>
     <input disabled="disabled" id="level" value="Waiting.." />
 
-    <label for="mode">Mode:</label>
-    <input id="mode" value="Waiting.." />
-
     <label for="step">Step (kHz):</label>
     <input id="step" value="Waiting.." />
 
-    <input id="send" type="submit" value="Send" />
+    <label for="mode">Mode:</label>
+    <select id="mode">
+      <option value="000">Auto</option>
+      <option value="0F1">AM</option>
+      <option value="0F0">FM</option>
+      <option value="0F4">USB</option>
+      <option value="0F5">LSB</option>
+      <option value="0F6">CW</option>
+      <option value="110">D-Star</option>
+      <option value="440">NXDN</option>
+      <option value="550">P25</option>
+      <option value="770">DMR</option>
+    </select>
 
     <script>
       $("#frequency").keypress(function(event) {
@@ -100,17 +109,13 @@
         }
       });
 
-      $("#mode").keypress(function(event) {
-        if (event.which == 13) {
+      $("#mode").change(function(event) {
           event.preventDefault();
           var inputMode = document.getElementById('mode').value;
-          var newMode = parseFloat(inputMode);
-          var inputCommand = "MD" + newMode;
+          var inputCommand = "MD" + inputMode;
           console.log("sending: " + inputCommand)
           socket.emit("sendSerial", inputCommand);
           socket.emit("sendSerial", "RX");
-          $("#mode").submit();
-        }
       });
 
       $("#up").click(function(event) {

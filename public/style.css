@@ -16,7 +16,7 @@ h1 {
 
 input {
     outline: none;
-    width: 50%;
+    width: 70%;
     background-color: black;
     color: #0F0;
     padding: 1em .5em;
@@ -40,11 +40,19 @@ label {
     width: 20%;
 }
 
-#send {
-    display:inline-block;
-    width: 10%;
-    float: left;
+select {
+  display: inline-block;
+  width: 50%;
+  float: left;
 }
+
+#frequency {
+    display:inline-block;
+    width: 50%;
+    float: left;
+
+}
+
 #up {
     display:inline-block;
     width: 10%;
@@ -55,12 +63,4 @@ label {
     display:inline-block;
     width: 10%;
     float: left;
-}
-
-#level {
-  width: 70%;
-}
-
-#mode {
-  width: 70%;
 }
