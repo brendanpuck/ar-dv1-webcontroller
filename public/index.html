@@ -38,7 +38,45 @@
         modeData = data.substring(data.indexOf("MD") + 2);
         modeCode = modeData.split(" ")[0];
 
-        $("#mode").val(modeCode.split(" ")[0]);
+//Substitute digital mode status to match menu options
+        shortCode = modeCode.substring(0,2);
+
+        switch (shortCode) {
+          case "01":
+          modeCode = "110";
+          break;
+
+          case "04":
+          modeCode = "440";
+          break;
+
+          case "05":
+          modeCode = "550";
+          break;
+
+          case "07":
+          modeCode = "770";
+          break;
+
+          case "10":
+          modeCode = "110";
+          break;
+
+          case "40":
+          modeCode = "440";
+          break;
+
+          case "50":
+          modeCode = "550";
+          break;
+
+          case "70":
+          modeCode = "770";
+          break;
+        }
+
+        $("#mode").val(modeCode);
+        //$("#mode").val(modeCode.split(" ")[0]);
       }
 
       //Split out step rate
