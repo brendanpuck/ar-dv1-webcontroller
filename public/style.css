@@ -1,73 +1,209 @@
 body {
-    background-color: black;
-    color: #0F0;
-    font-family: verdana;
+  background-color: black;
+  color: #0F0;
+  font-family: verdana;
 }
-
 div {
-    display: block;
-    float: left;
-    width: 100%;
-    width: 100vw;
+  float: left;
+  width: 100%;
+  width: 100vw;
 }
-
-body input,
-body label {
-    display: inline-block;
+body {
+  width: 800px;
+  margin: 0 auto;
 }
-
+body input, body label {
+  display: inline-block;
+}
 h1 {
-    text-align: center;
+  text-align: center;
 }
-
-
+form {
+  width: 400px;
+}
 input {
-    outline: none;
-    width: 20%;
-    background-color: black;
-    color: #0F0;
-    padding: 1em .5em;
-    display: inline-block;
-    float: left;
-    clear: right;
-    font-size: 1em;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
+  outline: none;
+  width: 200px;
+  background-color: black;
+  color: #0F0;
+  padding: 1em .5em;
+  display: inline-block;
+  float: left;
+  clear: right;
+  font-size: 1em;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
-
 label {
-    display: inline-block;
-    padding: .5em .5em;
-    font-size: 1em;
-    float: left;
-    text-align: left;
-    clear: right;
-    width: 20%;
+  display: inline-block;
+  width: 150px;
+  padding: .5em .5em;
+  font-size: 1em;
+  float: left;
+  text-align: left;
+  clear: right;
+  width: 20%;
 }
-
 select {
   display: inline-block;
   width: 20%;
   float: left;
 }
-
-#frequency {
-    display:inline-block;
-    width: 20%;
-    float: left;
-
+/*#frequency {
+  display: inline-block;
+  width: 20%;
+  float: left;
+  display: none;
+} */
+#mainDisplay {
+  display: inline-block;
+  width: 500px;
+  height: 200px;
+  margin-left: 5%;
 }
-
+#display {}
+#keypad {
+  display: inline-block;
+  width: 245px;
+  float: right;
+}
+#upDown {
+  display: inline-block;
+  width: 170px;
+  height: 200px;
+}
 #up {
-    display:inline-block;
-    width: 10%;
-    float: left;
+  display: inline-block;
+  width: 10%;
+  margin: 40% 5% 40% 5%;
+}
+#down {
+  display: inline-block;
+  width: 10%;
+  margin: 40% 5% 40% 5%;
+}
+.button {
+  /* width: 20px;
+   height: 20px; */
+  border-top: 1px solid #96d1f8;
+  background: #65a9d7;
+  background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7));
+  background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+  background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+  background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+  background: -o-linear-gradient(top, #3e779d, #65a9d7);
+  padding: 20px 30px;
+  margin: .2em .1em;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: rgba(0, 0, 0, 1) 0 1px 0;
+  -moz-box-shadow: rgba(0, 0, 0, 1) 0 1px 0;
+  box-shadow: rgba(0, 0, 0, 1) 0 1px 0;
+  text-shadow: rgba(0, 0, 0, .4) 0 1px 0;
+  color: white;
+  font-size: 18px;
+  font-family: Georgia, serif;
+  text-decoration: none;
+  vertical-align: middle;
+}
+.button:hover {
+  border-top-color: #28597a;
+  background: #28597a;
+  color: #ccc;
+}
+.button:active {
+  border-top-color: #1b435e;
+  background: #1b435e;
 }
 
-#down {
-    display:inline-block;
-    width: 10%;
-    float: left;
+.meter {
+  width: 400px;
+  height: 20px;
+  position: relative;
+  margin: 5px 30px 5px 30px;
+  background: #555;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  padding: 10px;
+  -webkit-box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+  -moz-box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+}
+.meter > span {
+  display: block;
+  height: 100%;
+  -webkit-border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -moz-border-radius-topright: 8px;
+  -moz-border-radius-bottomright: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+  -moz-border-radius-topleft: 20px;
+  -moz-border-radius-bottomleft: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: rgb(43, 194, 83);
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(43, 194, 83)), color-stop(1, rgb(84, 240, 84)));
+  background-image: -moz-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+  -webkit-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+.meter > span:after, .animate > span > span {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent));
+  background-image: -moz-linear-gradient( -45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  z-index: 1;
+  -webkit-background-size: 50px 50px;
+  -moz-background-size: 50px 50px;
+  -webkit-animation: move 2s linear infinite;
+  -webkit-border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -moz-border-radius-topright: 8px;
+  -moz-border-radius-bottomright: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+  -moz-border-radius-topleft: 20px;
+  -moz-border-radius-bottomleft: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  overflow: hidden;
+}
+.meter p {
+  display: inline-block;
+}
+.animate > span:after {
+  display: none;
+}
+
+#level {
+  display: inline-block;
+  width: 38px;
+}
+
+#mode {
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  font-size: 16pt;
+}
+.form {
+  display: inline-block;
+  width: 400px;
+  float: left;
 }

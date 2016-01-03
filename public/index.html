@@ -4,10 +4,30 @@
 
 <head>
   <script src="js/socket.io-client.min.js"></script>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <!--[if lt IE 9]>
+  <script type="text/javascript" src="SegmentDisplay/excanvas.js"></script>
+  <![endif]-->
 
+  <script type="text/javascript" src="js/segment-display.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
   <script type="text/javascript">
     var socket = io.connect();
+
+    var display = new SegmentDisplay("display");
+    display.pattern = "####.#####";
+    display.displayAngle = 6;
+    display.digitHeight = 20;
+    display.digitWidth = 14;
+    display.digitDistance = 2.5;
+    display.segmentWidth = 2;
+    display.segmentDistance = 0.3;
+    display.segmentCount = 7;
+    display.cornerType = 3;
+    display.colorOn = "#0F0";
+    display.colorOff = "#191A19";
+    display.draw();
+    display.setValue('1234.56789');
 
     socket.on('connected', function(data) {
       console.log('Connected, this is what I received : ');
@@ -23,6 +43,7 @@
       if (data.indexOf("RF") >= 0) {
         freq = data.substring(data.indexOf("RF") + 2);
         $("#frequency").val(freq.split(" ")[0]);
+        display.setValue(freq.split(" ")[0]);
       };
 
       //Split out Level and Mute data
@@ -30,53 +51,57 @@
         levelData = data.substring(data.indexOf("LM") + 2);
         level = levelData.substring(0, 3);
         mute = levelData.substring(3, 4);
-        $("#level").val(level.split(" ")[0] * -1);
+        //$("#level").val(level.split(" ")[0] * -1);
+        $("#level").text(level.split(" ")[0] * -1);
+        meterLevel = (140 - level) + "%";
+        $(function() {
+          $(".meter > span").animate({
+            width: meterLevel
+          }, 200);
+        });
       }
 
       //Split out and determine receiver mode
       if (data.indexOf("MD") >= 0) {
         modeData = data.substring(data.indexOf("MD") + 2);
         modeCode = modeData.split(" ")[0];
-
-//Substitute digital mode status to match menu options
-        shortCode = modeCode.substring(0,2);
+        //Substitute digital mode status to match menu options
+        shortCode = modeCode.substring(0, 2);
 
         switch (shortCode) {
           case "01":
-          modeCode = "110";
-          break;
+            modeCode = "110";
+            break;
 
           case "04":
-          modeCode = "440";
-          break;
+            modeCode = "440";
+            break;
 
           case "05":
-          modeCode = "550";
-          break;
+            modeCode = "550";
+            break;
 
           case "07":
-          modeCode = "770";
-          break;
+            modeCode = "770";
+            break;
 
           case "10":
-          modeCode = "110";
-          break;
+            modeCode = "110";
+            break;
 
           case "40":
-          modeCode = "440";
-          break;
+            modeCode = "440";
+            break;
 
           case "50":
-          modeCode = "550";
-          break;
+            modeCode = "550";
+            break;
 
           case "70":
-          modeCode = "770";
-          break;
+            modeCode = "770";
+            break;
         }
-
         $("#mode").val(modeCode);
-        //$("#mode").val(modeCode.split(" ")[0]);
       }
 
       //Split out step rate
@@ -90,28 +115,97 @@
   </script>
 
 
-  <body>
+</head>
 
-    <h2>AOR AR-DV1 Control</h2>
+<body>
+
+  <h2>AOR AR-DV1 Control</h2>
+  <div id="mainDisplay">
+    <canvas id="display" width="450" height="200">
+      Your browser is unfortunately not supported.
+    </canvas>
+  </div>
+  <div id="upDown">
+    <button id="down" type="submit" class=button>
+      < </button>
+        <button id="up" type="submit" class=button>
+          >
+        </button>
+        <!--
+      <input id="up" type="submit" value="UP" />
+      <input id="down" type="submit" value="DOWN" />
+    -->
+  </div>
+  <div class="meter">
+    <div id="level">
+    </div>
+    <span style="width: 0%"></span>
+  </div>
+  <div id="keypad">
+    <div>
+      <button class=button>
+        1
+      </button>
+      <button class=button>
+        2
+      </button>
+      <button class=button>
+        3
+      </button>
+    </div>
+    <div>
+      <button class=button>
+        4
+      </button>
+      <button class=button>
+        5
+      </button>
+      <button class=button>
+        6
+      </button>
+    </div>
+    <div>
+      <button class=button>
+        7
+      </button>
+      <button class=button>
+        8
+      </button>
+      <button class=button>
+        9
+      </button>
+    </div>
+    <div>
+      <button class=button>
+        .
+      </button>
+      <button class=button>
+        0
+      </button>
+      <button class=button>
+        E
+      </button>
+    </div>
+  </div>
+  <div id="freqPopup" class="form">
     <form>
       <div>
-
         <label for="frequency">Frequency (MHz):</label>
         <input type="number" id="frequency" value="Waiting.." />
-        <input id="up" type="submit" value="UP" />
-        <input id="down" type="submit" value="DOWN" />
       </div>
-      <div>
-
-        <label for="level">Level:</label>
-        <input disabled="disabled" id="level" value="Waiting.." />
-      </div>
+    </form>
+  </div>
+  <div id="stepBox" class="form">
+    <form>
       <div>
         <label for="step">Step (kHz):</label>
         <input type="number" id="step" value="Waiting.." />
       </div>
+    </form>
+  </div>
+  <div id="modeBox" class="form">
+    <form>
       <div>
-        <label for="mode">Mode:</label>
         <select id="mode">
           <option value="000">Auto</option>
           <option value="0F1">AM</option>
@@ -125,72 +219,90 @@
           <option value="770">DMR</option>
         </select>
       </div>
-
-      <script>
-        $("#frequency").keypress(function(event) {
-          if (event.which == 13) {
-            event.preventDefault();
-            var inputFreq = document.getElementById('frequency').value;
-            var newFreq = parseFloat(inputFreq).toFixed(5);
-            var inputCommand = "RF" + newFreq;
-            console.log("sending: " + inputCommand)
-            socket.emit("sendSerial", inputCommand);
-            socket.emit("sendSerial", "RX");
-            $("#frequency").submit();
-          }
-        });
-
-        $("#step").keypress(function(event) {
-          if (event.which == 13) {
-            event.preventDefault();
-            var inputStep = document.getElementById('step').value;
-            var newStep = parseFloat(inputStep).toFixed(2);
-            var inputCommand = "ST" + newStep;
-            console.log("sending: " + inputCommand)
-            socket.emit("sendSerial", inputCommand);
-            socket.emit("sendSerial", "RX");
-            $("#step").submit();
-          }
-        });
-
-        $("#mode").change(function(event) {
-          event.preventDefault();
-          var inputMode = document.getElementById('mode').value;
-          var inputCommand = "MD" + inputMode;
-          console.log("sending: " + inputCommand)
-          socket.emit("sendSerial", inputCommand);
-          socket.emit("sendSerial", "RX");
-        });
-
-        $("#up").click(function(event) {
-          event.preventDefault();
-          var inputFreq = document.getElementById('frequency').value;
-          var inputStep = document.getElementById('step').value;
-          var newStep = parseFloat(inputStep).toFixed(2);
-          var newFreq = parseFloat(parseFloat(inputFreq) + parseFloat(newStep * 0.001)).toFixed(5);
-          console.log("New freq: " + newFreq);
-          var inputCommand = "RF" + newFreq;
-          socket.emit("sendSerial", inputCommand);
-          socket.emit("sendSerial", "RX");
-        });
-
-        $("#down").click(function(event) {
-          event.preventDefault();
-          var inputFreq = document.getElementById('frequency').value;
-          var inputStep = document.getElementById('step').value;
-          var newStep = parseFloat(inputStep).toFixed(2);
-          var newFreq = parseFloat(parseFloat(inputFreq) - parseFloat(newStep * 0.001)).toFixed(5);
-          console.log("New freq: " + newFreq);
-          var inputCommand = "RF" + newFreq;
-          socket.emit("sendSerial", inputCommand);
-          socket.emit("sendSerial", "RX");
-        });
-      </script>
-
-      <link rel="stylesheet" href="style.css" />
-
-</head>
-
+    </form>
+  </div>
 </body>
+
+<script>
+  $('#mainDisplay').click(function() {
+    $('#freqPopup').show;
+  });
+
+
+  $("#frequency").keypress(function(event) {
+    if (event.which == 13) {
+      event.preventDefault();
+      var inputFreq = document.getElementById('frequency').value;
+      var newFreq = parseFloat(inputFreq).toFixed(5);
+      var inputCommand = "RF" + newFreq;
+      console.log("sending: " + inputCommand)
+      socket.emit("sendSerial", inputCommand);
+      socket.emit("sendSerial", "RX");
+      $("#frequency").submit();
+    }
+  });
+
+  $("#step").keypress(function(event) {
+    if (event.which == 13) {
+      event.preventDefault();
+      var inputStep = document.getElementById('step').value;
+      var newStep = parseFloat(inputStep).toFixed(2);
+      var inputCommand = "ST" + newStep;
+      console.log("sending: " + inputCommand)
+      socket.emit("sendSerial", inputCommand);
+      socket.emit("sendSerial", "RX");
+      $("#step").submit();
+    }
+  });
+
+  $("#mode").change(function(event) {
+    event.preventDefault();
+    var inputMode = document.getElementById('mode').value;
+    var inputCommand = "MD" + inputMode;
+    console.log("sending: " + inputCommand)
+    socket.emit("sendSerial", inputCommand);
+    socket.emit("sendSerial", "RX");
+  });
+
+  $("#up").click(function(event) {
+    event.preventDefault();
+    var inputFreq = document.getElementById('frequency').value;
+    var inputStep = document.getElementById('step').value;
+    var newStep = parseFloat(inputStep).toFixed(2);
+    var newFreq = parseFloat(parseFloat(inputFreq) + parseFloat(newStep * 0.001)).toFixed(5);
+    console.log("New freq: " + newFreq);
+    var inputCommand = "RF" + newFreq;
+    socket.emit("sendSerial", inputCommand);
+    socket.emit("sendSerial", "RX");
+  });
+
+  $("#down").click(function(event) {
+    event.preventDefault();
+    var inputFreq = document.getElementById('frequency').value;
+    var inputStep = document.getElementById('step').value;
+    var newStep = parseFloat(inputStep).toFixed(2);
+    var newFreq = parseFloat(parseFloat(inputFreq) - parseFloat(newStep * 0.001)).toFixed(5);
+    console.log("New freq: " + newFreq);
+    var inputCommand = "RF" + newFreq;
+    socket.emit("sendSerial", inputCommand);
+    socket.emit("sendSerial", "RX");
+  });
+  var toggleMeter = "off";
+
+  $(".meter").click(function(event) {
+    event.preventDefault();
+    if (toggleMeter === "off") {
+      toggleMeter = "on";
+      socket.emit("sendSerial", "LT05");
+      return toggleMeter;
+    } else {
+      toggleMeter = "off";
+      socket.emit("sendSerial", "LT00");
+      return toggleMeter;
+    };
+  })
+</script>
+
+<link rel="stylesheet" href="style.css" />
 
 </html>
